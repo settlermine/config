@@ -1,55 +1,67 @@
+
 #!/usr/bin/env bash
 set -e
 
-echo "===> Installing dependencies..."
-
+echo "===> Installing system dependencies..."
 sudo apt-get update
 sudo apt-get install -y \
   ninja-build gettext cmake unzip curl tar \
-  libtool libtool-bin autoconf automake g++ pkg-config doxygen jq git
+  libtool libtool-bin autoconf automake g++ pkg-config \
+  doxygen jq git
 
-# -------------------------
-# Установка Neovim (если нет)
-# -------------------------
-if ! command -v nvim >/dev/null 2>&1; then
-  echo "===> Building Neovim..."
+# -----------------------------
+# Neovim в /usr/local с sudo
+# -----------------------------
+BUILD_DIR="$HOME/tmp/nvim-build"
+echo "===> Preparing Neovim build directories..."
+rm -rf "$BUILD_DIR"
+mkdir -p "$BUILD_DIR"
+cd "$BUILD_DIR"
 
-  mkdir -p /tmp/nvim-build
-  cd /tmp/nvim-build
+LATEST_TAG=$(curl -s https://api.github.com/repos/neovim/neovim/releases/latest | jq -r .tag_name)
+echo "===> Building Neovim $LATEST_TAG"
 
-  LATEST_TAG=$(curl -s https://api.github.com/repos/neovim/neovim/releases/latest | jq -r .tag_name)
-  echo "Building Neovim $LATEST_TAG"
+curl -L -o nvim.tar.gz https://github.com/neovim/neovim/archive/refs/tags/${LATEST_TAG}.tar.gz
+tar -xzf nvim.tar.gz --strip-components=1
 
-  curl -L -o nvim.tar.gz https://github.com/neovim/neovim/archive/refs/tags/${LATEST_TAG}.tar.gz
-  tar -xzf nvim.tar.gz --strip-components=1
+make CMAKE_BUILD_TYPE=RelWithDebInfo
+sudo make install
 
-  make CMAKE_BUILD_TYPE=RelWithDebInfo
-  sudo make install
+echo "===> Creating symlink for convenience..."
+sudo ln -sf /usr/local/bin/nvim /usr/bin/nvim || true
 
-  cd /
-  rm -rf /tmp/nvim-build
-else
-  echo "===> Neovim already installed"
-fi
+echo "===> Neovim version:"
+nvim --version | head -n2
 
-# -------------------------
+# -----------------------------
 # Dotfiles
-# -------------------------
-if [ ! -d "$HOME/.config/nvim" ]; then
-  echo "===> Cloning dotfiles..."
+# -----------------------------
+CONFIG_REPO="$HOME/.config-repo"
+DOTFILES_DIR="$CONFIG_REPO/dotfiles"
 
-  git clone --depth=1 https://github.com/settlermine/dotfiles.git $HOME/.dotfiles
-  mkdir -p $HOME/.config
-  ln -s $HOME/.dotfiles/.config/nvim $HOME/.config/nvim
-else
-  echo "===> Neovim config already exists"
-fi
+echo "===> Setting up dotfiles..."
 
-# -------------------------
-# Установка плагинов
-# -------------------------
-echo "===> Installing plugins..."
+rm -rf "$CONFIG_REPO"
+git clone --depth=2 https://github.com/settlermine/config.git "$CONFIG_REPO"
 
-nvim --headless "+Lazy! sync" +qa
+rm -rf "$HOME/.config/nvim"
+mkdir -p "$HOME/.config"
+cp -r "$DOTFILES_DIR/.config/nvim" "$HOME/.config/nvim"
 
-echo "===> Done!"
+# -----------------------------
+# Lazygit
+# -----------------------------
+echo "===> Installing latest lazygit..."
+LAZYGIT_LATEST=$(curl -s https://api.github.com/repos/jesseduffield/lazygit/releases/latest | jq -r .tag_name)
+echo "Latest lazygit version: $LAZYGIT_LATEST"
+
+curl -Lo lazygit.tar.gz "https://github.com/jesseduffield/lazygit/releases/download/${LAZYGIT_LATEST}/lazygit_${LAZYGIT_LATEST#v}_Linux_x86_64.tar.gz"
+tar -xzf lazygit.tar.gz lazygit
+sudo mv lazygit /usr/local/bin/
+rm lazygit.tar.gz
+
+echo "===> Lazygit version:"
+lazygit --version
+
+echo "===> DONE ✅"
+
