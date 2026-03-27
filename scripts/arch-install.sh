@@ -16,7 +16,7 @@ fi
 yay -Syu
 
 echo "Installing pacman packages..."
-sudo pacman -S openvpn firejail sshfs lazygit 
+sudo pacman -S openvpn firejail sshfs lazygit ripgrep --noconfirm 
 
 echo "Installing yay packages..."
 yay -S openvpn-update-systemd-resolved 

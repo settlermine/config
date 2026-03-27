@@ -7,7 +7,7 @@ sudo apt-get update
 sudo apt-get install -y \
   ninja-build gettext cmake unzip curl tar \
   libtool libtool-bin autoconf automake g++ pkg-config \
-  doxygen jq git
+  doxygen jq git ripgrep
 
 # -----------------------------
 # Neovim в /usr/local с sudo
@@ -47,6 +47,35 @@ git clone --depth=2 https://github.com/settlermine/config.git "$CONFIG_REPO"
 rm -rf "$HOME/.config/nvim"
 mkdir -p "$HOME/.config"
 cp -r "$DOTFILES_DIR/.config/nvim" "$HOME/.config/nvim"
+
+
+# -----------------------------
+# Git
+# -----------------------------
+echo "===> Building latest Git from source..."
+
+GIT_BUILD_DIR="$HOME/tmp/git-build"
+rm -rf "$GIT_BUILD_DIR"
+mkdir -p "$GIT_BUILD_DIR"
+cd "$GIT_BUILD_DIR"
+
+# Получаем актуальный тег
+LATEST_TAG=$(curl -s https://api.github.com/repos/git/git/tags | jq -r '.[0].name')
+echo "Latest Git version: $LATEST_TAG"
+
+# Скачиваем исходники
+curl -L -o git.tar.gz "https://github.com/git/git/archive/refs/tags/${LATEST_TAG}.tar.gz"
+tar -xzf git.tar.gz --strip-components=1
+
+# Сборка и установка
+make prefix=$HOME/.local all
+make prefix=$HOME/.local install
+
+# Добавляем в PATH временно
+export PATH="$HOME/.local/bin:$PATH"
+
+echo "===> Git version check:"
+git --version
 
 # -----------------------------
 # Lazygit
