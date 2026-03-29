@@ -17,8 +17,6 @@ return {
           "pyright",
 	  "ruff",
 	  "debugpy",
-          "django-language-server",
-	  "isort",
 
           -- formatters
           "stylua",
