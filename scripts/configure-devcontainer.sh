@@ -7,7 +7,9 @@ sudo apt-get update
 sudo apt-get install -y \
   ninja-build gettext cmake unzip curl tar \
   libtool libtool-bin autoconf automake g++ pkg-config \
-  doxygen jq git ripgrep
+  doxygen jq git ripgrep fd-find
+
+ln -s $(which fdfind) ~/.local/bin/fd
 
 # -----------------------------
 # Neovim в /usr/local с sudo
