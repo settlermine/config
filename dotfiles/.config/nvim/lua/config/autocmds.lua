@@ -7,7 +7,7 @@
 -- Or remove existing autocmds by their group name (which is prefixed with `lazyvim_` for the defaults)
 -- e.g. vim.api.nvim_del_augroup_by_name("lazyvim_wrap_spell")
 
--- Чтобы LazyVim искал файлы в той репе, в которой открыт текущий файл
+-- Чтобы LazyGit искал файлы в той репе, в которой открыт текущий файл
 vim.api.nvim_create_autocmd("BufEnter", {
   callback = function()
     local file = vim.api.nvim_buf_get_name(0)
