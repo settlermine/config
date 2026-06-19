@@ -10,14 +10,9 @@ alias dcr="docker compose run --rm"
 alias dcu="docker compose up -d"
 alias dcd="docker compose down"
 
-alias nv=nvim
+alias vim=nvim
 
 alias chat='cursor-agent --workspace "$HOME/chat" --model auto --resume=00000000-0000-0000-0000-000000000000'
-
-
-#if [ -z "$TMUX" ]; then
-# tmux
-#fi
 
 HISTSIZE=10000000      # Сколько команд хранить в текущей сессии (в памяти)
 SAVEHIST=10000000      # Сколько команд хранить в файле истории на диске
