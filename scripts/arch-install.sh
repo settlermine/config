@@ -16,10 +16,9 @@ fi
 yay -Syu
 
 echo "Installing pacman packages..."
-sudo pacman -S tmux openvpn firejail sshfs lazygit ripgrep --noconfirm 
+sudo pacman -S tmux openvpn sshfs lazygit ripgrep --noconfirm 
 
 echo "Installing yay packages..."
-yay -S openvpn-update-systemd-resolved tmuxinator 
 
 echo "Configuring openvpn..."
 sudo systemctl enable --now systemd-resolved

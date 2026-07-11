@@ -10,6 +10,8 @@ alias dcr="docker compose run --rm"
 alias dcu="docker compose up -d"
 alias dcd="docker compose down"
 
+alias dcn="devcontainer"
+
 alias vim=nvim
 
 alias chat='cursor-agent --workspace "$HOME/chat" --model auto --resume=00000000-0000-0000-0000-000000000000'
@@ -25,4 +27,6 @@ setopt SHARE_HISTORY        # Делиться историей между вс�
 setopt APPEND_HISTORY       # Дописывать историю, а не перезаписывать её
 
 export PATH="$HOME/.local/bin:$PATH"
+export PATH="$HOME/.devcontainers/bin:$PATH"
+
 export EDITOR=vim
