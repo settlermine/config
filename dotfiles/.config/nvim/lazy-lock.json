@@ -1,6 +1,0 @@
-{
-  "nvim-lspconfig": { "branch": "master", "commit": "3371bf298c1f56efc26771ee961f461176958fb5" },
-  "plenary.nvim": { "branch": "master", "commit": "74b06c6c75e4eeb3108ec01852001636d85a932b" },
-  "telescope.nvim": { "branch": "master", "commit": "427b576c16792edad01a92b89721d923c19ad60f" },
-  "vimtex": { "branch": "master", "commit": "9388638aec092cceab6ac20dc08541f4e429e8ce" }
-}

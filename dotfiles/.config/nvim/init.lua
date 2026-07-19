@@ -1,43 +1,63 @@
-vim.opt.number = true
-vim.opt.relativenumber = true
+-- Need to install sudo pacman -S tree-sitter-cli base-devel curl  
+vim.g.mapleader = ' '
 
--- Настройка табов на 4 пробела
-vim.opt.tabstop = 4      -- Ширина табуляции в пробелах
-vim.opt.softtabstop = 4  -- Сколько пробелов вставлять при нажатии Tab
-vim.opt.shiftwidth = 4   -- Ширина отступа при командах >> и <<
-vim.opt.expandtab = true -- Превращать табы в пробелы
+vim.o.number = true
+vim.o.relativenumber = true
+vim.o.signcolumn = "yes"
+vim.opt.tabstop = 4
+vim.opt.softtabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.expandtab = true
 
 vim.opt.clipboard = "unnamedplus"
 
--- Lazy Plugin Manager. On fresh install do
--- git clone --filter=blob:none https://github.com/folke/lazy.nvim.git ~/.local/share/nvim/site/pack/lazy/start/lazy.nvim
-require("lazy").setup({
-    "lervag/vimtex",
-
-    {
-        "nvim-treesitter/nvim-treesitter",
-        lazy = false,
-        build = ":TSUpdate",
-        config = function()
-            local langs = { "python", "lua", "vim", "vimdoc", "markdown" }
-            require("nvim-treesitter").install(langs)
-        end,
-    },
-    {
-        "nvim-telescope/telescope.nvim",
-        dependencies = { "nvim-lua/plenary.nvim" }
-    },
-    -- "neovim/nvim-lspconfig",
+-- LSP settings
+vim.diagnostic.config({
+	severity_sort = true,
+	update_in_insert = false,
+	flat = { source = 'if_many' },
+	jump = { float = true }
 })
 
--- Shorctuts
-vim.g.mapleader = ' '
+local servers = { "lua_ls", "pyright"}
 
-vim.keymap.set('n', '<leader>ff', ':Telescope find_files<CR>')
-vim.keymap.set('n', '<leader>fg', ':Telescope live_grep<CR>')
+vim.pack.add({
+	"https://github.com/nvim-mini/mini.nvim",
+	"https://github.com/neovim/nvim-lspconfig",
+	"https://github.com/mason-org/mason.nvim",
+	"https://github.com/mason-org/mason-lspconfig.nvim",
+	"https://github.com/nvim-treesitter/nvim-treesitter",
+	"https://github.com/stevearc/oil.nvim",
+    "https://github.com/folke/lazydev.nvim",
+    { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') }
+})
 
-vim.keymap.set('n', 'gd', vim.lsp.buf.definition)
+require("oil").setup({
+	view_options = {
+		show_hidden = true
+	}
+})
+require("mini.pairs").setup()
+require("mini.pick").setup()
+require("mini.extra").setup()
+require("mason").setup()
+require("mason-lspconfig").setup({
+	ensure_installed = servers
+})
+require("blink.cmp").setup()
+require("lazydev").setup()
+-- Enable syntax highlight
+vim.api.nvim_create_autocmd('FileType', {
+	callback = function() pcall(vim.treesitter.start) end
+})
+vim.lsp.enable(servers)
 
+vim.keymap.set("n", "gd", vim.lsp.buf.definition)
+vim.keymap.set("n", "<leader>ff", ":Pick files<CR>")
+vim.keymap.set("n", "<leader>fg", ":Pick grep_live<CR>")
+vim.keymap.set("n", "<leader>sh", ":Pick help<CR>")
+vim.keymap.set("n", "<leader>fe", ":Oil<CR>")
+vim.keymap.set("n", "<leader>h", vim.diagnostic.open_float)
 -- Use terminal theme
 vim.opt.termguicolors = true
 vim.cmd([[
