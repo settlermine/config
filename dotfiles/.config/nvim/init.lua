@@ -29,6 +29,7 @@ vim.pack.add({
 	"https://github.com/nvim-treesitter/nvim-treesitter",
 	"https://github.com/stevearc/oil.nvim",
     "https://github.com/folke/lazydev.nvim",
+	"https://github.com/kdheepak/lazygit.nvim",
     { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') }
 })
 
@@ -57,6 +58,7 @@ vim.keymap.set("n", "<leader>ff", ":Pick files<CR>")
 vim.keymap.set("n", "<leader>fg", ":Pick grep_live<CR>")
 vim.keymap.set("n", "<leader>sh", ":Pick help<CR>")
 vim.keymap.set("n", "<leader>fe", ":Oil<CR>")
+vim.keymap.set("n", "<leader>gg", ":LazyGit<CR>")
 vim.keymap.set("n", "<leader>h", vim.diagnostic.open_float)
 -- Use terminal theme
 vim.opt.termguicolors = true
