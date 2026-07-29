@@ -9,6 +9,7 @@ cp -r ~/.config/nvim/ ../dotfiles/.config
 cp -r ~/.config/alacritty/ ../dotfiles/.config
 cp -r ~/.config/niri/ ../dotfiles/.config
 cp -r ~/.config/lazygit/ ../dotfiles/.config
+cp -r ~/.config/kitty/ ../dotfiles/.config
 
 echo "===> Done!"
 
