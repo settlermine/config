@@ -1,9 +1,17 @@
 {
   "plugins": {
+    "auto-session": {
+      "rev": "6cde3874a9283c2db55627acca5f28e4fa402320",
+      "src": "https://github.com/rmagatti/auto-session"
+    },
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",
       "version": "1.0.0 - 2.0.0"
+    },
+    "copy-python-path.nvim": {
+      "rev": "8da204dc0eb0e00afd3a8e9abdb6c1f8ea1fc3dc",
+      "src": "https://github.com/AnsonH/copy-python-path.nvim"
     },
     "darcula-dark.nvim": {
       "rev": "e4a407f37a2a6d7d01c66cc54a569edccad81592",
