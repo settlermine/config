@@ -44,18 +44,6 @@ vim.o.smartcase = true
 vim.o.clipboard = "unnamedplus"
 vim.o.exrc = true
 
--- LSP settings
-vim.diagnostic.config({
-	severity_sort = true,
-	update_in_insert = false,
-	flat = { source = 'if_many' },
-	jump = { float = true }
-})
-
-local servers = { "lua_ls", "pyright", "texlab", "marksman"}
-vim.lsp.enable(servers)
-
-
 --------------------------------------------------
 -- PLUGINS  
 --------------------------------------------------
@@ -106,11 +94,20 @@ require("mini.extra").setup()
 require("mini.icons").setup()
 
 -- LSP
+vim.diagnostic.config({
+	severity_sort = true,
+	update_in_insert = false,
+	flat = { source = 'if_many' },
+	jump = { float = true }
+})
+
+local servers = { "lua_ls", "pyright", "texlab", "marksman"}
 require("mason").setup()
 require("mason-lspconfig").setup({
 	ensure_installed = servers
 })
 
+vim.lsp.enable(servers)
 
 require("gitsigns").setup()
 

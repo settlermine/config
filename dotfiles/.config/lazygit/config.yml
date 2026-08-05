@@ -1,8 +1,9 @@
 git:
-  pagers:
+  diffRenderers:
     - colorArg: always
-      pager: delta --paging=never --side-by-side
+      command: delta --paging=never --side-by-side
+  ignoreSubmodules: "all"
 os:
   editPreset: 'nvim'
   edit: "if [ -n \"$NVIM\" ]; then nvim --server $NVIM --remote-send '<C-\\><C-n><cmd>close<cr>' && nvim --server $NVIM --remote {{filename}}; else nvim {{filename}}; fi"
-  editInTerminal: true 
+  editInTerminal: true

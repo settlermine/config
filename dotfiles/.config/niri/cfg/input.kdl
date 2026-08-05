@@ -7,8 +7,8 @@ input {
             //If you want to overwrite your keyboard layout,
             // uncomment the line below and change the layout accordingly.
             layout "us,ru" // Use the American keyboard layout\
-            options "grp:caps_toggle";
-            // options "grp:caps_toggle,shift:both_capslock";
+            // options "grp:caps_toggle";
+            options "grp:caps_toggle,shift:both_capslock";
         }
         numlock // Enable numlock on startup
     }
