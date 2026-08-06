@@ -1,4 +1,4 @@
--- Need to install sudo pacman -S tree-sitter-cli base-devel curl zathura zathura-pdf-mupdf texlive-core luakit node npm 
+-- Need to install sudo pacman -S tree-sitter-cli base-devel curl zathura zathura-pdf-mupdf texlive-core luakit node npm lazygit
 -- Also needed to execute :call mkdp#util#install() in comand line once
 
 --------------------------------------------------
@@ -32,12 +32,12 @@ vim.g.mkdp_theme = "dark"
 vim.o.number = true
 vim.o.relativenumber = true
 vim.o.signcolumn = "yes"
--- required for auto-session
-vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal,localoptions"
+-- tab settings
 vim.o.tabstop = 4
 vim.o.softtabstop = 4
 vim.o.shiftwidth = 4
 vim.o.expandtab = true
+
 vim.o.swapfile = false
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -59,14 +59,13 @@ vim.pack.add({
     "https://github.com/refractalize/oil-git-status.nvim",
 	"https://github.com/lewis6991/gitsigns.nvim",
     "https://github.com/tpope/vim-fugitive",
-    "https://github.com/stevearc/overseer.nvim",
 	"https://github.com/lervag/vimtex",
  	"https://github.com/iamcco/markdown-preview.nvim",
     "https://github.com/xiantang/darcula-dark.nvim",
     "https://github.com/3rd/image.nvim",
-	"https://github.com/rmagatti/auto-session", -- TODO: autosession doesn't word for some reason
     "https://github.com/AnsonH/copy-python-path.nvim",
-    { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') }
+    { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
+    "https://github.com/mfussenegger/nvim-dap",
 })
 
 require("oil").setup({
@@ -77,16 +76,7 @@ require("oil").setup({
 		show_hidden = true
 	}
 })
-require('oil-git-status').setup({
-  show_ignored = true
-})
--- VSCode-like tasks
-require('overseer').setup({
-	disable_template_modules = {
-		'overseer.template.vscode',
-		'overseer.template.make',
-	},
-})
+require('oil-git-status').setup({ show_ignored = true })
 
 require("mini.pairs").setup()
 require("mini.pick").setup()
@@ -113,13 +103,37 @@ require("gitsigns").setup()
 
 require("blink.cmp").setup()
 require("lazydev").setup()
-require("auto-session").setup( {
-    cwd_change_handling = true,
-    opts = {
-        bypass_save_filetypes = { "oil" },
-    }
-} )
 require("image").setup()
+
+-- Debugging
+local dap = require('dap')
+
+-- Need to install /usr/bin/python -m pip install debugpy --break-system-packages
+vim.fn.sign_define('DapBreakpoint', {
+    text = '🔴',
+})
+vim.fn.sign_define('DapStopped', {
+    text = '🟠',
+    linehl = 'Visual'
+})
+
+dap.adapters.debugpy = {
+    type = 'executable';
+    command = '/usr/bin/python';
+    args = {'-m', 'debugpy.adapter'}
+}
+dap.configurations.python = {
+    {
+        type = 'debugpy';
+        request = 'launch';
+        name = 'Launch file';
+        program = '${file}';
+        just_my_code = false;
+        pythonPath = function()
+            return '/usr/bin/python'
+        end;
+    }
+}
 
 -- Theme
 require("darcula").setup({
@@ -150,12 +164,39 @@ end)
 vim.keymap.set("n", "<leader>gu", function()
     require("mini.extra").pickers.git_files({ scope = "untracked", path = get_git_root() })
 end)
+vim.keymap.set("n", "<leader>gs", function()
+    local git_root = get_git_root()
+
+    if git_root == nil then return end
+
+    MiniPick.start({
+    source = {
+        name = "Git status",
+        items = vim.fn.systemlist("git -C " .. git_root .. " status --porcelain | awk '{print $2}'"),
+        cwd = git_root,
+        show = function(buf_id, items_to_show, query)
+            MiniPick.default_show(buf_id, items_to_show, query, { show_icons = true })
+        end
+    }
+    })
+end, { desc = "Git: modified and untracked files" })
 vim.keymap.set("n", "]c", function() require("gitsigns").nav_hunk("next") end)
 vim.keymap.set("n", "[c", function() require("gitsigns").nav_hunk("last") end)
 
--- Tasks
-vim.keymap.set("n", "<leader>or", "<cmd>OverseerRun<CR>")
-vim.keymap.set("n", "<leader>ot", "<cmd>OverseerToggle<CR>")
+-- Debugging
+vim.keymap.set("n", "<leader>db", ":DapToggleBreakpoint<CR>")
+vim.keymap.set("n", "<leader>dr", ":DapNew<CR>")
+vim.keymap.set("n", "<leader>dt", ":DapTerminate<CR>")
+vim.keymap.set("n", "<leader>dc", ":DapContinue<CR>")
+vim.keymap.set("n", "<leader>di", ":DapStepInto<CR>")
+vim.keymap.set("n", "<leader>do", ":DapStepOver<CR>")
+vim.keymap.set("n", "<leader>dO", ":DapStepOut<CR>")
+vim.keymap.set('n', '<leader>de', function()
+    local lines = vim.o.lines
+    local one_third_height = math.floor(lines / 3)
+    require('dap').repl.open({ height = one_third_height })
+    vim.cmd('wincmd j')
+end)
 
 -- Exit terminal-mode (go back to Normal mode) using Esc
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })

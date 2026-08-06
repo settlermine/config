@@ -39,6 +39,16 @@ qt6-wayland
 uv
 lazygit
 cmus
+python-pip
+python-debugpy
+# Виртуалки
+qemu-full
+virt-manager
+virt-viewer
+dnsmasq
+vde2
+openbsd-netcat
+libvirt
 
 #Paru
 tty-clock
@@ -50,3 +60,6 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/too
 curl -fsSL https://raw.githubusercontent.com/devcontainers/cli/main/scripts/install.sh | sh
 sudo usermod -aG docker $USER
 sudo systemctl enable docker
+sudo usermod -aG libvirt $USER
+sudo systemctl enable --now libvirtd
+sudo ufw disable

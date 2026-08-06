@@ -9,6 +9,10 @@
       "src": "https://github.com/saghen/blink.cmp",
       "version": "1.0.0 - 2.0.0"
     },
+    "blink.indent": {
+      "rev": "8b69b9262891fe81fe728fe6a52fa2a84dd5d5e0",
+      "src": "https://github.com/saghen/blink.indent"
+    },
     "copy-python-path.nvim": {
       "rev": "8da204dc0eb0e00afd3a8e9abdb6c1f8ea1fc3dc",
       "src": "https://github.com/AnsonH/copy-python-path.nvim"
@@ -52,6 +56,10 @@
     "neotest": {
       "rev": "1c529a1ef9c82e8131e872368415cecc2bb86ea2",
       "src": "https://github.com/nvim-neotest/neotest"
+    },
+    "nvim-dap": {
+      "rev": "9e848e09a697ee95302a3ef2dd43fd6eb709e570",
+      "src": "https://github.com/mfussenegger/nvim-dap"
     },
     "nvim-lspconfig": {
       "rev": "e7ca2c95ba316a8b846d3f3546d407908c5c4ccb",
