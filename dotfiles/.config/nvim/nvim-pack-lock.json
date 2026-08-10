@@ -21,6 +21,10 @@
       "rev": "e4a407f37a2a6d7d01c66cc54a569edccad81592",
       "src": "https://github.com/xiantang/darcula-dark.nvim"
     },
+    "follow-md-links.nvim": {
+      "rev": "99c4e7c78c0211e02c9ff282044b45f7b9dc2d0f",
+      "src": "https://github.com/jghauser/follow-md-links.nvim"
+    },
     "gitsigns.nvim": {
       "rev": "31d6fb2d618bca1482b9f274751ead5f03461408",
       "src": "https://github.com/lewis6991/gitsigns.nvim"

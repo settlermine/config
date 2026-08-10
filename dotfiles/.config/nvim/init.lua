@@ -78,7 +78,7 @@ require("oil").setup({
 })
 require('oil-git-status').setup({ show_ignored = true })
 
-require("mini.pairs").setup()
+-- require("mini.pairs").setup()
 require("mini.pick").setup()
 require("mini.extra").setup()
 require("mini.icons").setup()
@@ -164,22 +164,6 @@ end)
 vim.keymap.set("n", "<leader>gu", function()
     require("mini.extra").pickers.git_files({ scope = "untracked", path = get_git_root() })
 end)
-vim.keymap.set("n", "<leader>gs", function()
-    local git_root = get_git_root()
-
-    if git_root == nil then return end
-
-    MiniPick.start({
-    source = {
-        name = "Git status",
-        items = vim.fn.systemlist("git -C " .. git_root .. " status --porcelain | awk '{print $2}'"),
-        cwd = git_root,
-        show = function(buf_id, items_to_show, query)
-            MiniPick.default_show(buf_id, items_to_show, query, { show_icons = true })
-        end
-    }
-    })
-end, { desc = "Git: modified and untracked files" })
 vim.keymap.set("n", "]c", function() require("gitsigns").nav_hunk("next") end)
 vim.keymap.set("n", "[c", function() require("gitsigns").nav_hunk("last") end)
 
@@ -209,4 +193,10 @@ end)
 vim.keymap.set("n", "<leader>yp", ':CopyPythonPath dotted<CR>')
 
 vim.keymap.set("n", "<leader>h", vim.diagnostic.open_float)
-
+-- TODO: Add LaTeX
+vim.keymap.set("n", "<leader>v", function()
+    local ext = vim.fn.expand('%:e')
+    if ext == 'md' then
+        return ":MarkdownPreviewToggle<CR>"
+    end
+end, { expr = true })
