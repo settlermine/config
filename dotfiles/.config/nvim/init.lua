@@ -55,7 +55,6 @@ vim.pack.add({
 	"https://github.com/nvim-treesitter/nvim-treesitter",
 	"https://github.com/stevearc/oil.nvim",
     "https://github.com/folke/lazydev.nvim",
-	"https://github.com/kdheepak/lazygit.nvim",
     "https://github.com/refractalize/oil-git-status.nvim",
 	"https://github.com/lewis6991/gitsigns.nvim",
     "https://github.com/tpope/vim-fugitive",
@@ -153,7 +152,6 @@ vim.keymap.set("n", "<leader>fg", ":Pick grep_live<CR>")
 vim.keymap.set("n", "<leader>fe", ":Oil<CR>")
 vim.keymap.set("n", "<leader>fr", function() require("mini.pick").builtin.buffers() end)
 -- Git
-vim.keymap.set("n", "<leader>gg", ":LazyGitCurrentFile<CR>")
 vim.keymap.set("n", "<leader>gp", function() require("gitsigns").preview_hunk() end)
 vim.keymap.set("n", "<leader>gr", function() require("gitsigns").reset_hunk() end)
 vim.keymap.set("n", "<leader>gb", function() require("gitsigns").blame() end)
