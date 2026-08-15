@@ -49,11 +49,13 @@ dnsmasq
 vde2
 openbsd-netcat
 libvirt
+mpv
 
 #Paru
 tty-clock
 amneziawg-linux
 amneziavpn-bin
+yt-dlp
 
 #Other
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"

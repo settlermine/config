@@ -90,7 +90,7 @@ vim.diagnostic.config({
 	jump = { float = true }
 })
 
-local servers = { "lua_ls", "pyright", "texlab", "marksman"}
+local servers = { "lua_ls", "pyright", "texlab", "marksman", "clangd"}
 require("mason").setup()
 require("mason-lspconfig").setup({
 	ensure_installed = servers
@@ -107,7 +107,6 @@ require("image").setup()
 -- Debugging
 local dap = require('dap')
 
--- Need to install /usr/bin/python -m pip install debugpy --break-system-packages
 vim.fn.sign_define('DapBreakpoint', {
     text = '🔴',
 })
@@ -138,7 +137,6 @@ dap.configurations.python = {
 require("darcula").setup({
 	theme = "darcula"  -- loads built-in colors/themes/darcula.json
 })
-
 
 --------------------------------------------------
 -- KEYMAPS
