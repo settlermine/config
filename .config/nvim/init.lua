@@ -2,6 +2,11 @@
 -- Also needed to execute :call mkdp#util#install() in comand line once
 
 --------------------------------------------------
+-- GLOBAL VARIABLES 
+--------------------------------------------------
+local mkdp_enabled = false
+
+--------------------------------------------------
 -- UTILS 
 --------------------------------------------------
 -- TODO: fix for oil
@@ -21,6 +26,17 @@ local function get_git_root()
     end
 end
 
+local function toggle_md_preview()
+    if vim.bo.filetype ~= "markdown" then
+        return
+    end
+    mkdp_enabled = not mkdp_enabled
+    if mkdp_enabled then
+        vim.cmd("MarkdownPreview")
+    else
+        vim.cmd("MarkdownPreviewStop")
+    end
+end
 --------------------------------------------------
 -- VIM 
 --------------------------------------------------
@@ -43,6 +59,17 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.clipboard = "unnamedplus"
 vim.o.exrc = true
+
+-- Auto reload makrdown preview when changing files
+vim.api.nvim_create_autocmd("BufEnter", {
+    pattern = "*.md",
+    group = vim.api.nvim_create_augroup("MkdpAutoRefresh", { clear = true }),
+    callback = function()
+        if mkdp_enabled then
+            vim.cmd("MarkdownPreview")
+        end
+    end,
+})
 
 --------------------------------------------------
 -- PLUGINS  
@@ -190,9 +217,5 @@ vim.keymap.set("n", "<leader>yp", ':CopyPythonPath dotted<CR>')
 
 vim.keymap.set("n", "<leader>h", vim.diagnostic.open_float)
 -- TODO: Add LaTeX
-vim.keymap.set("n", "<leader>v", function()
-    local ext = vim.fn.expand('%:e')
-    if ext == 'md' then
-        return ":MarkdownPreviewToggle<CR>"
-    end
-end, { expr = true })
+vim.keymap.set("n", "<leader>v", toggle_md_preview)
+
