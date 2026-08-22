@@ -42,8 +42,12 @@ end
 --------------------------------------------------
 vim.g.mapleader = ' '
 vim.g.vimtex_view_method = "zathura"
+
 vim.g.mkdp_browser = "luakit"
 vim.g.mkdp_theme = "dark"
+vim.g.mkdp_combine_preview = 1
+vim.g.mkdp_combine_preview_auto_refresh = 1
+vim.g.mkdp_auto_close = 0
 
 vim.o.number = true
 vim.o.relativenumber = true
@@ -59,17 +63,6 @@ vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.clipboard = "unnamedplus"
 vim.o.exrc = true
-
--- Auto reload makrdown preview when changing files
-vim.api.nvim_create_autocmd("BufEnter", {
-    pattern = "*.md",
-    group = vim.api.nvim_create_augroup("MkdpAutoRefresh", { clear = true }),
-    callback = function()
-        if mkdp_enabled then
-            vim.cmd("MarkdownPreview")
-        end
-    end,
-})
 
 --------------------------------------------------
 -- PLUGINS  
