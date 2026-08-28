@@ -1,0 +1,67 @@
+# Здесь планируется нормальное ридми по установки пакетов, мб даже скрипт для автоматизации. Но мне пока лень
+
+# Pacman
+kitty
+libreoffice
+git-delta
+zsh
+tmux
+zen-browser
+nvim
+bluetui
+htop
+wiremix
+paru
+tree-sitter-cli
+base-devel
+bruno
+curl
+zathura
+zathura-pdf-mupdf
+texlive-core
+luakit
+npm
+ffmpeg
+syncthing
+keepassxc
+ntfs-3g
+yazi
+postgresql
+dbeaver
+docker
+docker-compose
+docker-buildx
+chromium
+networkmanager-openvpn
+network-manager-applet
+qt5-wayland
+qt6-wayland
+uv
+lazygit
+cmus
+python-pip
+python-debugpy
+# Виртуалки
+qemu-full
+virt-manager
+virt-viewer
+dnsmasq
+vde2
+openbsd-netcat
+libvirt
+mpv
+
+#Paru
+tty-clock
+amneziawg-linux
+amneziavpn-bin
+yt-dlp
+
+#Other
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+curl -fsSL https://raw.githubusercontent.com/devcontainers/cli/main/scripts/install.sh | sh
+sudo usermod -aG docker $USER
+sudo systemctl enable docker
+sudo usermod -aG libvirt $USER
+sudo systemctl enable --now libvirtd
+sudo ufw disable
