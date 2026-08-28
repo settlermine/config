@@ -85,6 +85,8 @@ vim.pack.add({
     "https://github.com/AnsonH/copy-python-path.nvim",
     { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
     "https://github.com/mfussenegger/nvim-dap",
+    "https://github.com/rcarriga/nvim-dap-ui",
+    "https://github.com/nvim-neotest/nvim-nio",
 })
 
 require("oil").setup({
@@ -126,6 +128,22 @@ require("image").setup()
 
 -- Debugging
 local dap = require('dap')
+local dapui = require('dapui')
+
+dapui.setup()
+
+dap.listeners.before.attach.dapui_config = function()
+    dapui.open()
+end
+dap.listeners.before.launch.dapui_config = function()
+    dapui.open()
+end
+dap.listeners.before.event_terminated.dapui_config = function()
+    dapui.close()
+end
+dap.listeners.before.event_exited.dapui_config = function()
+    dapui.close()
+end
 
 vim.fn.sign_define('DapBreakpoint', {
     text = '🔴',
@@ -191,12 +209,7 @@ vim.keymap.set("n", "<leader>dc", ":DapContinue<CR>")
 vim.keymap.set("n", "<leader>di", ":DapStepInto<CR>")
 vim.keymap.set("n", "<leader>do", ":DapStepOver<CR>")
 vim.keymap.set("n", "<leader>dO", ":DapStepOut<CR>")
-vim.keymap.set('n', '<leader>de', function()
-    local lines = vim.o.lines
-    local one_third_height = math.floor(lines / 3)
-    require('dap').repl.open({ height = one_third_height })
-    vim.cmd('wincmd j')
-end)
+vim.keymap.set("n", "<leader>du", function() dapui.toggle() end)
 
 -- Exit terminal-mode (go back to Normal mode) using Esc
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
