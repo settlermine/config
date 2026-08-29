@@ -14,17 +14,17 @@ alias dcn="devcontainer"
 
 alias vim=nvim
 
-alias chat='cursor-agent --workspace "$HOME/chat" --model auto --resume=00000000-0000-0000-0000-000000000000'
+alias lmake="make -f local.Makefile"
 
-HISTSIZE=10000000      # Сколько команд хранить в текущей сессии (в памяти)
-SAVEHIST=10000000      # Сколько команд хранить в файле истории на диске
-HISTFILE=~/.zshhistory # Путь к файлу истории (убедись, что он такой)
+HISTSIZE=10000000
+SAVEHIST=10000000
+HISTFILE=~/.zshhistory
 
-setopt HIST_IGNORE_DUPS     # Не сохранять дубликаты, если команда введена подряд
-setopt HIST_IGNORE_ALL_DUPS # Удалять старую копию команды, если ввел её снова
-setopt HIST_REDUCE_BLANKS   # Удалять лишние пробелы в командах
-setopt SHARE_HISTORY        # Делиться историей между всеми открытыми окнами терминала
-setopt APPEND_HISTORY       # Дописывать историю, а не перезаписывать её
+setopt HIST_IGNORE_DUPS
+setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_REDUCE_BLANKS
+setopt SHARE_HISTORY
+setopt APPEND_HISTORY
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.devcontainers/bin:$PATH"
