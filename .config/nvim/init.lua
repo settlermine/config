@@ -87,7 +87,14 @@ vim.pack.add({
     "https://github.com/mfussenegger/nvim-dap",
     "https://github.com/rcarriga/nvim-dap-ui",
     "https://github.com/nvim-neotest/nvim-nio",
+    "https://github.com/rmagatti/auto-session",
 })
+
+
+-- Auto-sessions
+-- !!! NEEDS TO BE BEFORE OIL SETUP !!! 
+vim.o.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,terminal,winsize,winpos,localoptions"
+require("auto-session").setup()
 
 require("oil").setup({
     win_options = {
@@ -103,6 +110,7 @@ require('oil-git-status').setup({ show_ignored = true })
 require("mini.pick").setup()
 require("mini.extra").setup()
 require("mini.icons").setup()
+require("mini.visits").setup()
 
 -- LSP
 vim.diagnostic.config({
@@ -132,18 +140,10 @@ local dapui = require('dapui')
 
 dapui.setup()
 
-dap.listeners.before.attach.dapui_config = function()
-    dapui.open()
-end
-dap.listeners.before.launch.dapui_config = function()
-    dapui.open()
-end
-dap.listeners.before.event_terminated.dapui_config = function()
-    dapui.close()
-end
-dap.listeners.before.event_exited.dapui_config = function()
-    dapui.close()
-end
+dap.listeners.before.attach.dapui_config = function() dapui.open() end
+dap.listeners.before.launch.dapui_config = function() dapui.open() end
+dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
+dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
 
 vim.fn.sign_define('DapBreakpoint', {
     text = '🔴',
@@ -172,9 +172,7 @@ dap.configurations.python = {
 }
 
 -- Theme
-require("darcula").setup({
-	theme = "darcula"  -- loads built-in colors/themes/darcula.json
-})
+require("darcula").setup()
 
 --------------------------------------------------
 -- KEYMAPS
@@ -186,7 +184,23 @@ vim.keymap.set("n", "gr", vim.lsp.buf.references)
 vim.keymap.set("n", "<leader>ff", ":Pick files<CR>")
 vim.keymap.set("n", "<leader>fg", ":Pick grep_live<CR>")
 vim.keymap.set("n", "<leader>fe", ":Oil<CR>")
-vim.keymap.set("n", "<leader>fr", function() require("mini.pick").builtin.buffers() end)
+vim.keymap.set("n", "<leader>fr", ":Pick visit_paths<CR>")
+vim.keymap.set("n", "<leader>fb", function() require("mini.pick").builtin.buffers() end)
+vim.keymap.set("n", "<leader>ft", function()
+    local items = {}
+    for _, b in ipairs(vim.api.nvim_list_bufs()) do
+        if vim.bo[b].buftype == "terminal" then
+            table.insert(items, {
+                text = vim.api.nvim_buf_get_name(b),
+                bufnr = b,
+            })
+        end
+    end
+    require("mini.pick").start({
+        source = { name = "Terminals", items = items },
+    })
+end)
+
 -- Git
 vim.keymap.set("n", "<leader>gp", function() require("gitsigns").preview_hunk() end)
 vim.keymap.set("n", "<leader>gr", function() require("gitsigns").reset_hunk() end)
