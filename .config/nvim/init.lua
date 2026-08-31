@@ -88,6 +88,7 @@ vim.pack.add({
     "https://github.com/rcarriga/nvim-dap-ui",
     "https://github.com/nvim-neotest/nvim-nio",
     "https://github.com/rmagatti/auto-session",
+    "https://github.com/mfussenegger/nvim-dap-python",
 })
 
 
@@ -145,31 +146,9 @@ dap.listeners.before.launch.dapui_config = function() dapui.open() end
 dap.listeners.before.event_terminated.dapui_config = function() dapui.close() end
 dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
 
-vim.fn.sign_define('DapBreakpoint', {
-    text = '🔴',
-})
-vim.fn.sign_define('DapStopped', {
-    text = '🟠',
-    linehl = 'Visual'
-})
-
-dap.adapters.debugpy = {
-    type = 'executable';
-    command = '/usr/bin/python';
-    args = {'-m', 'debugpy.adapter'}
-}
-dap.configurations.python = {
-    {
-        type = 'debugpy';
-        request = 'launch';
-        name = 'Launch file';
-        program = '${file}';
-        just_my_code = false;
-        pythonPath = function()
-            return '/usr/bin/python'
-        end;
-    }
-}
+vim.fn.sign_define('DapBreakpoint', { text = '🔴', })
+vim.fn.sign_define('DapStopped', { text = '🟠', linehl = 'Visual' })
+require("dap-python").setup("python3")
 
 -- Theme
 require("darcula").setup()
