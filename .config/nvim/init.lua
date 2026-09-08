@@ -61,6 +61,18 @@ vim.o.expandtab = true
 vim.o.swapfile = false
 vim.o.ignorecase = true
 vim.o.smartcase = true
+-- OSC 52 clipboard setting to make clipboard work in devcontainer
+vim.g.clipboard = {
+	name = "OSC 52",
+	copy = {
+		["+"] = require("vim.ui.clipboard.osc52").copy("+"),
+		["*"] = require("vim.ui.clipboard.osc52").copy("*"),
+	},
+	paste = {
+		["+"] = require("vim.ui.clipboard.osc52").paste("+"),
+		["*"] = require("vim.ui.clipboard.osc52").paste("*"),
+	},
+}
 vim.o.clipboard = "unnamedplus"
 vim.o.exrc = true
 
