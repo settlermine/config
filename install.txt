@@ -8,9 +8,7 @@ zsh
 tmux
 zen-browser
 nvim
-bluetui
 htop
-wiremix
 paru
 tree-sitter-cli
 base-devel
