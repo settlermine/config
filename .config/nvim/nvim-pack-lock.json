@@ -21,6 +21,10 @@
       "rev": "e4a407f37a2a6d7d01c66cc54a569edccad81592",
       "src": "https://github.com/xiantang/darcula-dark.nvim"
     },
+    "diffview.nvim": {
+      "rev": "4516612fe98ff56ae0415a259ff6361a89419b0a",
+      "src": "https://github.com/sindrets/diffview.nvim"
+    },
     "follow-md-links.nvim": {
       "rev": "99c4e7c78c0211e02c9ff282044b45f7b9dc2d0f",
       "src": "https://github.com/jghauser/follow-md-links.nvim"
@@ -56,6 +60,10 @@
     "mini.nvim": {
       "rev": "9459d7f41ae77d909579dab0aea2bdd3210fac9f",
       "src": "https://github.com/nvim-mini/mini.nvim"
+    },
+    "neogit": {
+      "rev": "5adc81b26232954cd7a90f158aa7844c18fc3165",
+      "src": "https://github.com/neogitorg/neogit"
     },
     "neotest": {
       "rev": "1c529a1ef9c82e8131e872368415cecc2bb86ea2",

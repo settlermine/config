@@ -9,23 +9,6 @@ local mkdp_enabled = false
 --------------------------------------------------
 -- UTILS 
 --------------------------------------------------
--- TODO: fix for oil
-local function get_current_path()
-	if vim.bo.filetype == "oil" then
-		return require("oil").get_current_dir()
-	end
-	return vim.api.nvim_buf_get_name(0)
-end
-
-local function get_git_root()
-	local path = get_current_path()
-    if path == nil then
-        return
-    else
-	    return vim.fs.root(path, ".git")
-    end
-end
-
 local function toggle_md_preview()
     if vim.bo.filetype ~= "markdown" then
         return
@@ -48,6 +31,9 @@ vim.g.mkdp_theme = "dark"
 vim.g.mkdp_combine_preview = 1
 vim.g.mkdp_combine_preview_auto_refresh = 1
 vim.g.mkdp_auto_close = 0
+
+-- Hide top panel (git plugins trying to show it)
+vim.o.showtabline = 0
 
 vim.o.number = true
 vim.o.relativenumber = true
@@ -81,26 +67,32 @@ vim.o.exrc = true
 --------------------------------------------------
 vim.pack.add({
 	"https://github.com/nvim-mini/mini.nvim",
+	"https://github.com/nvim-treesitter/nvim-treesitter",
+	"https://github.com/stevearc/oil.nvim",
+    "https://github.com/refractalize/oil-git-status.nvim",
+    "https://github.com/xiantang/darcula-dark.nvim",
+    "https://github.com/AnsonH/copy-python-path.nvim",
+    { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
+    "https://github.com/rmagatti/auto-session",
+    -- document editing and preview
+ 	"https://github.com/iamcco/markdown-preview.nvim",
+    "https://github.com/3rd/image.nvim",
+	"https://github.com/lervag/vimtex",
+    -- lsp
 	"https://github.com/neovim/nvim-lspconfig",
 	"https://github.com/mason-org/mason.nvim",
 	"https://github.com/mason-org/mason-lspconfig.nvim",
-	"https://github.com/nvim-treesitter/nvim-treesitter",
-	"https://github.com/stevearc/oil.nvim",
-    "https://github.com/folke/lazydev.nvim",
-    "https://github.com/refractalize/oil-git-status.nvim",
-	"https://github.com/lewis6991/gitsigns.nvim",
-    "https://github.com/tpope/vim-fugitive",
-	"https://github.com/lervag/vimtex",
- 	"https://github.com/iamcco/markdown-preview.nvim",
-    "https://github.com/xiantang/darcula-dark.nvim",
-    "https://github.com/3rd/image.nvim",
-    "https://github.com/AnsonH/copy-python-path.nvim",
-    { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
+    "https://github.com/folke/lazydev.nvim", -- fix vim api calls lsp errors in nvim config
+    -- debugging and testing
     "https://github.com/mfussenegger/nvim-dap",
     "https://github.com/rcarriga/nvim-dap-ui",
     "https://github.com/nvim-neotest/nvim-nio",
-    "https://github.com/rmagatti/auto-session",
     "https://github.com/mfussenegger/nvim-dap-python",
+    -- git 
+    "https://github.com/sindrets/diffview.nvim",
+	"https://github.com/lewis6991/gitsigns.nvim",
+    "https://github.com/neogitorg/neogit",
+    "https://github.com/tpope/vim-fugitive",
 })
 
 
@@ -177,32 +169,18 @@ vim.keymap.set("n", "<leader>fg", ":Pick grep_live<CR>")
 vim.keymap.set("n", "<leader>fe", ":Oil<CR>")
 vim.keymap.set("n", "<leader>fr", ":Pick visit_paths<CR>")
 vim.keymap.set("n", "<leader>fb", function() require("mini.pick").builtin.buffers() end)
-vim.keymap.set("n", "<leader>ft", function()
-    local items = {}
-    for _, b in ipairs(vim.api.nvim_list_bufs()) do
-        if vim.bo[b].buftype == "terminal" then
-            table.insert(items, {
-                text = vim.api.nvim_buf_get_name(b),
-                bufnr = b,
-            })
-        end
-    end
-    require("mini.pick").start({
-        source = { name = "Terminals", items = items },
-    })
-end)
 
 -- Git
 vim.keymap.set("n", "<leader>gp", function() require("gitsigns").preview_hunk() end)
 vim.keymap.set("n", "<leader>gr", function() require("gitsigns").reset_hunk() end)
 vim.keymap.set("n", "<leader>gb", function() require("gitsigns").blame() end)
 vim.keymap.set("n", "<leader>gd", ":Gdiffsplit<CR>")
-vim.keymap.set("n", "<leader>gm", function()
-    require("mini.extra").pickers.git_files({ scope = "modified", path = get_git_root() })
-end)
-vim.keymap.set("n", "<leader>gu", function()
-    require("mini.extra").pickers.git_files({ scope = "untracked", path = get_git_root() })
-end)
+vim.keymap.set("n", "<leader>gg", function()
+    local git_root = vim.fs.root(0, ".git")
+    if git_root then
+        require("neogit").open({ cwd = git_root })
+    end
+end, { desc = "Open Neogit in current file's repo" })
 vim.keymap.set("n", "]c", function() require("gitsigns").nav_hunk("next") end)
 vim.keymap.set("n", "[c", function() require("gitsigns").nav_hunk("last") end)
 
