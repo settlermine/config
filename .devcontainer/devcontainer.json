@@ -1,0 +1,14 @@
+{
+  "name": "test-devcontainer",
+  "dockerComposeFile": "../compose.yml",
+  "service": "app",
+  "workspaceFolder": "/app",
+  "overrideCommand": true,
+  "mounts": [
+    # Change mount if user is not root
+    "source=${localEnv:HOME}/.config/nvim,target=/root/.config/nvim,type=bind"
+  ],
+  "postCreateCommand": "bash .devcontainer/configure-devcontainer.sh"
+  # If user is not root in container
+  // "postCreateCommand": "sudo bash .devcontainer/configure-devcontainer.sh"
+}
