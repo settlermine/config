@@ -62,6 +62,10 @@ vim.g.clipboard = {
 vim.o.clipboard = "unnamedplus"
 vim.o.exrc = true
 
+-- Aliases
+vim.api.nvim_create_user_command('Do', 'DiffviewOpen', {})
+vim.api.nvim_create_user_command('Dc', 'DiffviewClose', {})
+
 --------------------------------------------------
 -- PLUGINS  
 --------------------------------------------------
