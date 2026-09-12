@@ -78,6 +78,7 @@ vim.pack.add({
     "https://github.com/AnsonH/copy-python-path.nvim",
     { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
     "https://github.com/rmagatti/auto-session",
+    "https://github.com/brenoprata10/nvim-highlight-colors",
     -- document editing and preview
  	"https://github.com/iamcco/markdown-preview.nvim",
     "https://github.com/3rd/image.nvim",
@@ -158,6 +159,8 @@ vim.fn.sign_define('DapBreakpoint', { text = '🔴', })
 vim.fn.sign_define('DapStopped', { text = '🟠', linehl = 'Visual' })
 require("dap-python").setup("python3")
 
+-- Colors
+require("nvim-highlight-colors").setup({})
 -- Theme
 require("darcula").setup()
 
