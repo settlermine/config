@@ -2,25 +2,6 @@
 -- Also needed to execute :call mkdp#util#install() in comand line once
 
 --------------------------------------------------
--- GLOBAL VARIABLES 
---------------------------------------------------
-local mkdp_enabled = false
-
---------------------------------------------------
--- UTILS 
---------------------------------------------------
-local function toggle_md_preview()
-    if vim.bo.filetype ~= "markdown" then
-        return
-    end
-    mkdp_enabled = not mkdp_enabled
-    if mkdp_enabled then
-        vim.cmd("MarkdownPreview")
-    else
-        vim.cmd("MarkdownPreviewStop")
-    end
-end
---------------------------------------------------
 -- VIM 
 --------------------------------------------------
 vim.g.mapleader = ' '
@@ -63,8 +44,8 @@ vim.o.clipboard = "unnamedplus"
 vim.o.exrc = true
 
 -- Aliases
-vim.api.nvim_create_user_command('Do', 'DiffviewOpen', {})
-vim.api.nvim_create_user_command('Dc', 'DiffviewClose', {})
+vim.api.nvim_create_user_command("Do", "DiffviewOpen <args>", { nargs = "*" })
+vim.api.nvim_create_user_command("Dc", "DiffviewClose <args>", { nargs = "*" })
 
 --------------------------------------------------
 -- PLUGINS  
@@ -79,10 +60,12 @@ vim.pack.add({
     { src = 'https://github.com/saghen/blink.cmp', version = vim.version.range('1.x') },
     "https://github.com/rmagatti/auto-session",
     "https://github.com/brenoprata10/nvim-highlight-colors",
+    "https://github.com/nvim-tree/nvim-web-devicons", -- dep for other plugins
     -- document editing and preview
  	"https://github.com/iamcco/markdown-preview.nvim",
     "https://github.com/3rd/image.nvim",
 	"https://github.com/lervag/vimtex",
+    "https://github.com/MeanderingProgrammer/render-markdown.nvim", --preview markdown in terminal
     -- lsp
 	"https://github.com/neovim/nvim-lspconfig",
 	"https://github.com/mason-org/mason.nvim",
@@ -132,10 +115,7 @@ vim.diagnostic.config({
 
 local servers = { "lua_ls", "pyright", "texlab", "marksman", "clangd"}
 require("mason").setup()
-require("mason-lspconfig").setup({
-	ensure_installed = servers
-})
-
+require("mason-lspconfig").setup({ ensure_installed = servers })
 vim.lsp.enable(servers)
 
 require("gitsigns").setup()
@@ -201,6 +181,10 @@ vim.keymap.set("n", "<leader>do", ":DapStepOver<CR>")
 vim.keymap.set("n", "<leader>dO", ":DapStepOut<CR>")
 vim.keymap.set("n", "<leader>du", function() dapui.toggle() end)
 
+-- Document viewing 
+vim.keymap.set("n", "<leader>mv", ":MarkdownPreviewToggle <CR>")
+vim.keymap.set("n", "<leader>mr", ":RenderMarkdown toggle<CR>")
+
 -- Exit terminal-mode (go back to Normal mode) using Esc
 vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
 
@@ -212,6 +196,4 @@ end)
 vim.keymap.set("n", "<leader>yp", ':CopyPythonPath dotted<CR>')
 
 vim.keymap.set("n", "<leader>h", vim.diagnostic.open_float)
--- TODO: Add LaTeX
-vim.keymap.set("n", "<leader>v", toggle_md_preview)
 
