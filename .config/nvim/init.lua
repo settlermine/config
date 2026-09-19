@@ -113,7 +113,8 @@ vim.diagnostic.config({
 	jump = { float = true }
 })
 
-local servers = { "lua_ls", "pyright", "texlab", "marksman", "clangd"}
+local servers = { "lua_ls", "pyright", "ruff", "texlab", "marksman", "clangd"}
+
 require("mason").setup()
 require("mason-lspconfig").setup({ ensure_installed = servers })
 vim.lsp.enable(servers)
