@@ -139,6 +139,7 @@ dap.listeners.before.event_exited.dapui_config = function() dapui.close() end
 vim.fn.sign_define('DapBreakpoint', { text = '🔴', })
 vim.fn.sign_define('DapStopped', { text = '🟠', linehl = 'Visual' })
 require("dap-python").setup("python3")
+require("dap.ext.vscode")
 
 -- Colors
 require("nvim-highlight-colors").setup({})
