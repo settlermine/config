@@ -120,8 +120,18 @@ require("mason-lspconfig").setup({ ensure_installed = servers })
 vim.lsp.enable(servers)
 
 require("gitsigns").setup()
-
-require("blink.cmp").setup()
+require("blink.cmp").setup({
+    keymap = {
+        preset = "default",
+        -- Autocompletion menu only triggering by pressing Ctrl+Space
+        ["<C-Space>"] = { "show", "show_documentation", "hide_documentation" },
+    },
+    completion = {
+        menu = {
+            auto_show = false,
+        },
+    }
+})
 require("lazydev").setup()
 require("image").setup()
 
