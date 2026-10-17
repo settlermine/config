@@ -63,3 +63,8 @@ sudo systemctl enable docker
 sudo usermod -aG libvirt $USER
 sudo systemctl enable --now libvirtd
 sudo ufw disable
+
+# Disable micro mirror its sound to connected headphones
+card=$(awk '/fifine/ {print $1; exit}' /proc/asound/cards)
+amixer -c "$card" cset name='Mic Playback Switch' off
+amixer -c "$card" cset name='Mic Capture Volume' 32,32
