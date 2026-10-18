@@ -1,21 +1,7 @@
     window-rule {
-        geometry-corner-radius 10 // Set every window radius to 20
+        geometry-corner-radius 10
         clip-to-geometry true
     }
-
-    window-rule {
-        match app-id="Alacritty"
-        open-maximized true
-    }
-    window-rule {
-        match app-id="zen"
-        open-maximized true
-    }
-    window-rule {
-        match app-id="dev.zed.Zed"
-        open-maximized true
-    }
-        
 
     // if you use steam you will probably like these
     window-rule {
