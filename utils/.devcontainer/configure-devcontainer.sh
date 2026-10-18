@@ -2,8 +2,8 @@
 set -euo pipefail
 
 case "$(uname -m)" in
-	x86_64)  nvim_a=x86_64; rg_a=x86_64-unknown-linux-musl; ts_a=x64; node_a=x64 ;;
-	aarch64) nvim_a=arm64;  rg_a=aarch64-unknown-linux-musl; ts_a=arm64; node_a=arm64 ;;
+	x86_64)  nvim_a=x86_64; musl_a=x86_64-unknown-linux-musl; ts_a=x64; node_a=x64; fzf_a=amd64 ;;
+	aarch64) nvim_a=arm64;  musl_a=aarch64-unknown-linux-musl; ts_a=arm64; node_a=arm64; fzf_a=arm64 ;;
 	*) echo "unsupported arch: $(uname -m)" >&2; exit 1 ;;
 esac
 
@@ -63,11 +63,27 @@ ln -sfn /usr/local/nvim/bin/nvim /usr/local/bin/nvim
 
 # ripgrep (musl)
 rg_url="$(curl -fsSL https://api.github.com/repos/BurntSushi/ripgrep/releases/latest \
-	| sed -n 's/.*"browser_download_url": "\([^"]*'"${rg_a}"'\.tar\.gz\)".*/\1/p' \
+	| sed -n 's/.*"browser_download_url": "\([^"]*'"${musl_a}"'\.tar\.gz\)".*/\1/p' \
 	| head -n1)"
 curl -fsSL -o rg.tar.gz "$rg_url"
 tar -xzf rg.tar.gz
 install -m755 ripgrep-*/rg /usr/local/bin/rg
+
+# fd (musl)
+fd_url="$(curl -fsSL https://api.github.com/repos/sharkdp/fd/releases/latest \
+	| sed -n 's/.*"browser_download_url": "\([^"]*'"${musl_a}"'\.tar\.gz\)".*/\1/p' \
+	| head -n1)"
+curl -fsSL -o fd.tar.gz "$fd_url"
+tar -xzf fd.tar.gz
+install -m755 fd-*/fd /usr/local/bin/fd
+
+# fzf
+fzf_url="$(curl -fsSL https://api.github.com/repos/junegunn/fzf/releases/latest \
+	| sed -n 's/.*"browser_download_url": "\([^"]*linux_'"${fzf_a}"'\.tar\.gz\)".*/\1/p' \
+	| head -n1)"
+curl -fsSL -o fzf.tar.gz "$fzf_url"
+tar -xzf fzf.tar.gz
+install -m755 fzf /usr/local/bin/fzf
 
 # tree-sitter
 curl -fsSL -o tree-sitter.gz \
@@ -77,6 +93,8 @@ chmod +x /usr/local/bin/tree-sitter
 
 nvim --version | sed -n '1p' || true
 rg --version | sed -n '1p' || true
+fd --version
+fzf --version
 tree-sitter --version
 unzip -v 2>&1 | sed -n '1p' || true
 npm --version

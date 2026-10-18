@@ -29,6 +29,10 @@
       "rev": "99c4e7c78c0211e02c9ff282044b45f7b9dc2d0f",
       "src": "https://github.com/jghauser/follow-md-links.nvim"
     },
+    "fzf-lua": {
+      "rev": "c67fadd9a24230417267e4f9068227e093c0be2b",
+      "src": "https://github.com/ibhagwan/fzf-lua"
+    },
     "gitsigns.nvim": {
       "rev": "31d6fb2d618bca1482b9f274751ead5f03461408",
       "src": "https://github.com/lewis6991/gitsigns.nvim"

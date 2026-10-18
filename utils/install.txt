@@ -12,6 +12,9 @@ htop
 paru
 tree-sitter-cli
 base-devel
+fzf
+ripgrep
+fd
 bruno
 curl
 zathura

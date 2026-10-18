@@ -1,5 +1,16 @@
--- Need to install sudo pacman -S tree-sitter-cli base-devel curl zathura zathura-pdf-mupdf texlive-core luakit node npm lazygit
+-- Need to install sudo pacman -S tree-sitter-cli base-devel curl zathura zathura-pdf-mupdf texlive-core luakit node npm fzf ripgrep fd
 -- Also needed to execute :call mkdp#util#install() in comand line once
+
+--------------------------------------------------
+-- UTILS 
+--------------------------------------------------
+local function get_git_root()
+    local path = require("oil").get_current_dir() or vim.api.nvim_buf_get_name(0)
+    if path == "" or path:match("^%a+://") then
+        return vim.fn.getcwd()
+    end
+    return vim.fs.root(path, ".git") or vim.fn.getcwd()
+end
 
 --------------------------------------------------
 -- VIM 
@@ -45,13 +56,15 @@ vim.o.exrc = true
 
 -- Aliases
 vim.api.nvim_create_user_command("Do", "DiffviewOpen <args>", { nargs = "*" })
+vim.api.nvim_create_user_command("Dh", "DiffviewFileHistory <args>", { nargs = "*" })
+vim.api.nvim_create_user_command("Df", "DiffviewFileHistory %", { nargs = "*" })
 vim.api.nvim_create_user_command("Dc", "DiffviewClose <args>", { nargs = "*" })
 
 --------------------------------------------------
 -- PLUGINS  
 --------------------------------------------------
 vim.pack.add({
-	"https://github.com/nvim-mini/mini.nvim",
+    "https://github.com/ibhagwan/fzf-lua",
 	"https://github.com/nvim-treesitter/nvim-treesitter",
 	"https://github.com/stevearc/oil.nvim",
     "https://github.com/refractalize/oil-git-status.nvim",
@@ -80,7 +93,6 @@ vim.pack.add({
     "https://github.com/sindrets/diffview.nvim",
 	"https://github.com/lewis6991/gitsigns.nvim",
     "https://github.com/neogitorg/neogit",
-    "https://github.com/tpope/vim-fugitive",
 })
 
 
@@ -99,11 +111,8 @@ require("oil").setup({
 })
 require('oil-git-status').setup({ show_ignored = true })
 
--- require("mini.pairs").setup()
-require("mini.pick").setup()
-require("mini.extra").setup()
-require("mini.icons").setup()
-require("mini.visits").setup()
+local fzf = require("fzf-lua")
+fzf.setup()
 
 -- LSP
 vim.diagnostic.config({
@@ -119,7 +128,9 @@ require("mason").setup()
 require("mason-lspconfig").setup({ ensure_installed = servers })
 vim.lsp.enable(servers)
 
-require("gitsigns").setup()
+local gitsigns = require("gitsigns")
+gitsigns.setup()
+
 require("blink.cmp").setup({
     keymap = {
         preset = "default",
@@ -159,29 +170,26 @@ require("darcula").setup()
 --------------------------------------------------
 -- KEYMAPS
 --------------------------------------------------
-vim.keymap.set("n", "<leader>sh", ":Pick help<CR>")
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
+vim.keymap.set("n", "-", ":Oil<CR>")
+
 -- File picker
-vim.keymap.set("n", "<leader>ff", ":Pick files<CR>")
-vim.keymap.set("n", "<leader>fg", ":Pick grep_live<CR>")
-vim.keymap.set("n", "<leader>fe", ":Oil<CR>")
-vim.keymap.set("n", "<leader>fr", ":Pick visit_paths<CR>")
-vim.keymap.set("n", "<leader>fb", function() require("mini.pick").builtin.buffers() end)
+vim.keymap.set("n", "<leader>ff", function() fzf.files({ cwd = get_git_root(), hidden = false }) end)
+vim.keymap.set("n", "<leader>fa", function() fzf.files( { no_ignore = true }) end)
+vim.keymap.set("n", "<leader>fr", function() fzf.oldfiles({ cwd_only = true, include_current_session = true }) end)
+-- Live grep
+vim.keymap.set("n", "<leader>//", function() fzf.live_grep( { cwd = get_git_root(), hidden = true } ) end)
+vim.keymap.set("n", "<leader>/a", function() fzf.live_grep( { hidden = true, no_ignore = true } ) end)
 
 -- Git
-vim.keymap.set("n", "<leader>gp", function() require("gitsigns").preview_hunk() end)
-vim.keymap.set("n", "<leader>gr", function() require("gitsigns").reset_hunk() end)
-vim.keymap.set("n", "<leader>gb", function() require("gitsigns").blame() end)
-vim.keymap.set("n", "<leader>gd", ":Gdiffsplit<CR>")
-vim.keymap.set("n", "<leader>gg", function()
-    local git_root = vim.fs.root(0, ".git")
-    if git_root then
-        require("neogit").open({ cwd = git_root })
-    end
-end, { desc = "Open Neogit in current file's repo" })
-vim.keymap.set("n", "]c", function() require("gitsigns").nav_hunk("next") end)
-vim.keymap.set("n", "[c", function() require("gitsigns").nav_hunk("last") end)
+vim.keymap.set("n", "<leader>gp", function() gitsigns.preview_hunk() end)
+vim.keymap.set("n", "<leader>gr", function() gitsigns.reset_hunk() end)
+vim.keymap.set("n", "<leader>gb", function() gitsigns.blame() end)
+vim.keymap.set("n", "<leader>gd", function() gitsigns.diffthis() end)
+vim.keymap.set("n", "<leader>gg", function() require("neogit").open({ cwd = get_git_root() }) end)
+vim.keymap.set("n", "]c", function() gitsigns.nav_hunk("next") end)
+vim.keymap.set("n", "[c", function() gitsigns.nav_hunk("prev") end)
 
 -- Debugging
 vim.keymap.set("n", "<leader>db", ":DapToggleBreakpoint<CR>")
@@ -205,7 +213,17 @@ vim.keymap.set("n", "<leader>yf", function()
 	vim.fn.setreg("+", vim.fn.expand("%"))
 	vim.notify("Copied: " .. vim.fn.expand("%"))
 end)
+vim.keymap.set({ "n", "x" }, "<leader>yl", function()
+    local path = vim.fn.expand("%")
+    local s, e = vim.fn.line("v"), vim.fn.line(".")
+    if s > e then s, e = e, s end
+    local ref = s == e and ("%s:%d"):format(path, s) or ("%s:%d-%d"):format(path, s, e)
+    vim.fn.setreg("+", ref)
+    vim.notify("Copied: " .. ref)
+    if vim.fn.mode():match("[vV\22]") then
+        vim.api.nvim_feedkeys(vim.keycode("<Esc>"), "n", false)
+    end
+end)
 vim.keymap.set("n", "<leader>yp", ':CopyPythonPath dotted<CR>')
 
 vim.keymap.set("n", "<leader>h", vim.diagnostic.open_float)
-
