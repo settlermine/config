@@ -93,6 +93,7 @@ vim.pack.add({
     "https://github.com/sindrets/diffview.nvim",
 	"https://github.com/lewis6991/gitsigns.nvim",
     "https://github.com/neogitorg/neogit",
+    "https://github.com/linrongbin16/gitlinker.nvim",
 })
 
 
@@ -231,5 +232,6 @@ vim.keymap.set({ "n", "x" }, "<leader>yl", function()
     end
 end)
 vim.keymap.set("n", "<leader>yp", ':CopyPythonPath dotted<CR>')
+vim.keymap.set({ "n", "v" }, "<leader>yg", ":GitLink<cr>")
 
 vim.keymap.set("n", "<leader>h", vim.diagnostic.open_float)
