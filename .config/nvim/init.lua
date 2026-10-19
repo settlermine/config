@@ -166,6 +166,12 @@ require("dap.ext.vscode")
 require("nvim-highlight-colors").setup({})
 -- Theme
 require("darcula").setup()
+-- Diff groups without fg, otherwise they override syntax highlighting in diffs
+-- TODO: suggest PR in original plugin
+vim.api.nvim_set_hl(0, "DiffAdd", { bg = "#294436" })
+vim.api.nvim_set_hl(0, "DiffChange", { bg = "#303c4d" })
+vim.api.nvim_set_hl(0, "DiffText", { bg = "#3d5a80" })
+vim.api.nvim_set_hl(0, "DiffDelete", { bg = "#484a4a", fg = "#656e76" })
 
 --------------------------------------------------
 -- KEYMAPS
