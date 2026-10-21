@@ -94,6 +94,10 @@ vim.pack.add({
 	"https://github.com/lewis6991/gitsigns.nvim",
     "https://github.com/neogitorg/neogit",
     "https://github.com/linrongbin16/gitlinker.nvim",
+    -- databases
+    "https://github.com/tpope/vim-dadbod",
+    "https://github.com/kristijanhusak/vim-dadbod-ui",
+    "https://github.com/kristijanhusak/vim-dadbod-completion",
 })
 
 

@@ -9,6 +9,18 @@ esac
 
 cd "$(mktemp -d)"
 
+# Resolved from the /releases/latest redirect: the API is rate limited and its JSON breaks sed parsing
+gh_latest_tag() {
+	local tag
+	tag="$(curl -fsSLI -o /dev/null -w '%{url_effective}' "https://github.com/$1/releases/latest")"
+	tag="${tag##*/}"
+	if [[ -z "$tag" || "$tag" == latest ]]; then
+		echo "$1: could not resolve latest release tag" >&2
+		exit 1
+	fi
+	echo "$tag"
+}
+
 # unzip (no portable binary) 
 if ! command -v unzip >/dev/null; then
 	echo "installing unzip..."
@@ -62,26 +74,23 @@ mv "nvim-linux-${nvim_a}" /usr/local/nvim
 ln -sfn /usr/local/nvim/bin/nvim /usr/local/bin/nvim
 
 # ripgrep (musl)
-rg_url="$(curl -fsSL https://api.github.com/repos/BurntSushi/ripgrep/releases/latest \
-	| sed -n 's/.*"browser_download_url": "\([^"]*'"${musl_a}"'\.tar\.gz\)".*/\1/p' \
-	| head -n1)"
-curl -fsSL -o rg.tar.gz "$rg_url"
+rg_tag="$(gh_latest_tag BurntSushi/ripgrep)"
+curl -fsSL -o rg.tar.gz \
+	"https://github.com/BurntSushi/ripgrep/releases/download/${rg_tag}/ripgrep-${rg_tag}-${musl_a}.tar.gz"
 tar -xzf rg.tar.gz
 install -m755 ripgrep-*/rg /usr/local/bin/rg
 
 # fd (musl)
-fd_url="$(curl -fsSL https://api.github.com/repos/sharkdp/fd/releases/latest \
-	| sed -n 's/.*"browser_download_url": "\([^"]*'"${musl_a}"'\.tar\.gz\)".*/\1/p' \
-	| head -n1)"
-curl -fsSL -o fd.tar.gz "$fd_url"
+fd_tag="$(gh_latest_tag sharkdp/fd)"
+curl -fsSL -o fd.tar.gz \
+	"https://github.com/sharkdp/fd/releases/download/${fd_tag}/fd-${fd_tag}-${musl_a}.tar.gz"
 tar -xzf fd.tar.gz
 install -m755 fd-*/fd /usr/local/bin/fd
 
 # fzf
-fzf_url="$(curl -fsSL https://api.github.com/repos/junegunn/fzf/releases/latest \
-	| sed -n 's/.*"browser_download_url": "\([^"]*linux_'"${fzf_a}"'\.tar\.gz\)".*/\1/p' \
-	| head -n1)"
-curl -fsSL -o fzf.tar.gz "$fzf_url"
+fzf_tag="$(gh_latest_tag junegunn/fzf)"
+curl -fsSL -o fzf.tar.gz \
+	"https://github.com/junegunn/fzf/releases/download/${fzf_tag}/fzf-${fzf_tag#v}-linux_${fzf_a}.tar.gz"
 tar -xzf fzf.tar.gz
 install -m755 fzf /usr/local/bin/fzf
 
