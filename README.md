@@ -1,28 +1,29 @@
-# Настройка новой машины
-TODO: Написать инструкцию с установкой пакетов из install.txt. Валидировать на чистой установке
+# Config syncronization 
+Run all commands in repo directory.
 
-# Синхронизация конфигов 
-Для синхронизации используется утилита `stow`.
+## Adding new config
 
-## Добавление новых конфигурационных файлов
-Команды выполняются в корневой директории репозитория:
-
-1. Переносим файл конфига в репозиторий:
+1. Move new config to the repo. For example:
 ```bash
 mv ~/.zshrc .
 ```
-2. Запускаем синхронизацию:
+2. Start synchorization:
 ```bash
 stow .
 ```
-## Настройка на новой машине
 
-Команды выполняются в корневой директории репозитория:
-1. Удаляем старые конфиги:
+## Setting up a new computer 
+
+Run these commands in repo directory.
+1. Remove old configs:
 ```bash
-rm -r ~/.zshrc ~/.tmux.conf ~/.config/niri ~/.config/kitty ~/.config/lazygit ~/.config/nvim/ ~/.config/noctalia/ ~/.gitconfig
+rm -r ~/.zshrc ~/.tmux.conf ~/.config/niri ~/.config/kitty ~/.config/lazygit ~/.config/nvim/ ~/.config/noctalia/ ~/.local/state/noctalia/settings.toml ~/.gitconfig
 ```
-2. Запускаем синхронизацию
+2. Start synchronization:
 ```bash
 stow .
+```
+3. Reboot Noctalia:
+```bash
+pkill -x noctalia; while pgrep -x noctalia >/dev/null; do sleep 0.2; done; niri msg action spawn -- noctalia
 ```
