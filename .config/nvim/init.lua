@@ -183,7 +183,7 @@ vim.api.nvim_set_hl(0, "DiffDelete", { bg = "#484a4a", fg = "#656e76" })
 --------------------------------------------------
 vim.keymap.set("n", "gd", vim.lsp.buf.definition)
 vim.keymap.set("n", "gr", vim.lsp.buf.references)
-vim.keymap.set("n", "-", ":Oil<CR>")
+vim.keymap.set("n", "<leader>-", ":Oil<CR>")
 
 -- File picker
 vim.keymap.set("n", "<leader>ff", function() fzf.files({ cwd = get_git_root(), hidden = false }) end)
