@@ -14,6 +14,7 @@ binds {
     Mod+B                               hotkey-overlay-title="Open Browser: Zen" { spawn "zen-browser"; }
     Mod+Semicolon                       hotkey-overlay-title="Open App Launcher" { spawn "noctalia" "msg" "panel-toggle" "launcher"; }
     Mod+Alt+L                           hotkey-overlay-title="Lock Screen" { spawn "noctalia" "msg" "session" "lock"; }
+    Mod+Alt+Q                           hotkey-overlay-title="Lock And Suspend" { spawn "noctalia" "msg" "session" "lock-and-suspend"; }
     Mod+Alt+H                           hotkey-overlay-title="Open Home Menu" { spawn "noctalia" "msg" "panel-toggle" "control-center"; }
     Mod+Alt+B                           hotkey-overlay-title="Open Bluetooth Menu" { spawn "noctalia" "msg" "panel-toggle" "control-center" "bluetooth"; }
     Mod+Alt+A                           hotkey-overlay-title="Open Audio Menu" { spawn "noctalia" "msg" "panel-toggle" "control-center" "audio"; }
