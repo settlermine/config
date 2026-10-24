@@ -1,0 +1,15 @@
+[bar.default]
+enabled = false
+
+[keybinds]
+down = [ "Down", "Ctrl+j" ]
+left = [ "Left", "Ctrl+h" ]
+right = [ "Right", "Ctrl+l" ]
+up = [ "Up", "Ctrl+k" ]
+
+[theme]
+custom_palette = "Darcula"
+source = "custom"
+
+[wallpaper.default]
+path = "./.config/noctalia/monokuma-wallpaper.jpg"

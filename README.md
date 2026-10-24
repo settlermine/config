@@ -20,7 +20,7 @@ stow .
 Команды выполняются в корневой директории репозитория:
 1. Удаляем старые конфиги:
 ```bash
-rm -r ~/.zshrc ~/.tmux.conf ~/.config/niri ~/.config/kitty ~/.config/lazygit ~/.config/nvim/ ~/.gitconfig
+rm -r ~/.zshrc ~/.tmux.conf ~/.config/niri ~/.config/kitty ~/.config/lazygit ~/.config/nvim/ ~/.config/noctalia/ ~/.gitconfig
 ```
 2. Запускаем синхронизацию
 ```bash
