@@ -1,7 +1,9 @@
 export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="robbyrussell"
+# vim mode settings
+KEYTIMEOUT=1
 
-plugins=(git)
+plugins=(git vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -12,21 +14,15 @@ alias dcd="docker compose down"
 
 alias dcn="devcontainer"
 
-alias vim=nvim
-
 alias lmake="make -f local.Makefile"
 
 HISTSIZE=10000000
 SAVEHIST=10000000
-HISTFILE=~/.zshhistory
 
-setopt HIST_IGNORE_DUPS
 setopt HIST_IGNORE_ALL_DUPS
 setopt HIST_REDUCE_BLANKS
-setopt SHARE_HISTORY
-setopt APPEND_HISTORY
 
 export PATH="$HOME/.local/bin:$PATH"
 export PATH="$HOME/.devcontainers/bin:$PATH"
 
-export EDITOR=vim
+export EDITOR=nvim
