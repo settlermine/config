@@ -148,6 +148,10 @@
     "vimtex": {
       "rev": "853eb587873a7061a083655578be56dd8027b834",
       "src": "https://github.com/lervag/vimtex"
+    },
+    "wordswitch.nvim": {
+      "rev": "0d63af458d30376f9b3f1be7a5a82be0b59cacc0",
+      "src": "https://github.com/tandy1229/wordswitch.nvim"
     }
   }
 }
