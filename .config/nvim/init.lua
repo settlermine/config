@@ -59,6 +59,8 @@ vim.api.nvim_create_user_command('Do', 'DiffviewOpen <args>', { nargs = '*' })
 vim.api.nvim_create_user_command('Dh', 'DiffviewFileHistory <args>', { nargs = '*' })
 vim.api.nvim_create_user_command('Df', 'DiffviewFileHistory %', { nargs = '*' })
 vim.api.nvim_create_user_command('Dc', 'DiffviewClose <args>', { nargs = '*' })
+-- Format python file
+vim.api.nvim_create_user_command('Pf', '!isort % ; ruff format %', { nargs = '*' })
 
 --------------------------------------------------
 -- PLUGINS  
