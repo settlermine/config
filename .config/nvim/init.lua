@@ -54,6 +54,13 @@ vim.g.clipboard = {
 vim.o.clipboard = 'unnamedplus'
 vim.o.exrc = true
 
+-- Custom syntax highlight
+vim.filetype.add({
+  pattern = {
+    [".*%.pipeline"] = "groovy",
+  },
+})
+
 -- Aliases
 vim.api.nvim_create_user_command('Do', 'DiffviewOpen <args>', { nargs = '*' })
 vim.api.nvim_create_user_command('Dh', 'DiffviewFileHistory <args>', { nargs = '*' })
@@ -97,10 +104,6 @@ vim.pack.add({
 	'https://github.com/lewis6991/gitsigns.nvim',
     'https://github.com/neogitorg/neogit',
     'https://github.com/linrongbin16/gitlinker.nvim',
-    -- databases
-    'https://github.com/tpope/vim-dadbod',
-    'https://github.com/kristijanhusak/vim-dadbod-ui',
-    'https://github.com/kristijanhusak/vim-dadbod-completion',
 })
 
 
